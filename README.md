@@ -21,3 +21,17 @@ e.g. `BIN=http://mybin/foo go run .`
 
 If you want to make a new bin, run the jsbin app. It will print the URL of the new bin. 
 
+
+## Test & Build
+
+`./build.sh` or in docker `docker-compose up`
+
+# Run
+`./run.sh` or in docker `docker-compose run --service-ports app ./run.sh`
+
+## Deploy to CloudFoundry
+
+```
+./build.sh
+cf push -p cmd/poker-app
+```

@@ -4,7 +4,6 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/gorilla/websocket"
-	"html/template"
 	"io"
 	"net/http"
 	"strconv"
@@ -33,8 +32,7 @@ type Game interface {
 type PlayerServer struct {
 	store PlayerStore
 	http.Handler
-	template *template.Template
-	game     Game
+	game Game
 }
 
 const jsonContentType = "application/json"
@@ -68,6 +66,10 @@ func (p *PlayerServer) webSocket(w http.ResponseWriter, r *http.Request) {
 	p.game.Start(numberOfPlayers, ws)
 
 	winner := ws.WaitForMsg()
+
+	if winner == "" {
+		return
+	}
 
 	if err := p.game.Finish(strings.ToLower(winner)); err != nil {
 		fmt.Fprintf(ws, "there was a problem finishing the game - %v", p.game.Finish(strings.ToLower(winner)))
